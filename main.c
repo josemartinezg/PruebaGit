@@ -21,12 +21,13 @@
 #define ESC     27
 #define ENTER   13
 
-#define CANT 4
-#define LEN 20
+#define CANT 6
+#define LEN 40
 
 #define MAX   100
 #define MAXEVA 10
 #define MAXDES 40
+#define MAXESTUD 40
 
 typedef struct
 {
@@ -43,23 +44,30 @@ typedef struct
     float porcentaje;
 
 }EVAL;
-
-
+void getDatosEval(int, EVAL [MAXEVA]);
+void getDatosEstud(int, ESTUD[MAXESTUD], EVAL[MAXEVA]);
+void desplegar(char [CANT][LEN], int, int, int, int);
+void setcolor(int ,int );
+void colordefault();
+int menu(char [CANT][LEN], int, int, int);
+int random(int, int );
 int main()
 {
-       char opciones[CANT][LEN] = {" Opc 1 ",
-                               " Opc 2 ",
-                               " Opc 3 ",
-                               " Salir "};
+     char opciones[CANT][LEN] = {" Ingresar evaluaciones   ",
+                               " Ingresar estudiantes    ",
+                               " Calificaciones          ",
+                               "                         ",
+                               " Salir                   "};
    int opc;
 
    opc = menu(opciones,CANT,10,5);
+
 
    if ( opc != -1 )
       printf("Opci%cn seleccionada ==> [%s]",162,opciones[opc]);
 
 
-    int i,j, cantEval, cantEstud;
+    /*int i,j, cantEval, cantEstud;
     EVAL evaluacion[MAXEVA];
     char descripcion[20][MAXDES];
     float puntosPorEvaluacion[20];
@@ -95,22 +103,109 @@ int main()
         {
             do {
             fflush(stdin);
+            printf("Puntaje de la evaluación: ");
+            fflush(stdin);
             puts(descripcion[j]);
             fflush(stdin);
             scanf("%f", &puntosPorEvaluacion[j]);
             fflush(stdin);
             printf("%.2f\n", puntosPorEvaluacion[j]);
-            if (puntosPorEvaluacion[j]< 0 || puntosPorEvaluacion[j] > 100) {
+            if (puntosPorEvaluacion[j]< 0 || puntosPorEvaluacion[j] > 100)
                 printf("DIGITE UNA CALIFICACION VALIDA\n");
-            }
+
             }while (puntosPorEvaluacion[j] < 0 || puntosPorEvaluacion[j] > 100);
         }
-    }
+    }*/
     return 0;
 }
 
+void getDatosEval(int cantEval, EVAL evaluacion[MAXEVA])
+{
+    system("CLS");
+    _setcursortype(3);
+    int i;
+    printf("Introduzca la cantidad de evaluaciones del curso: \n");
+    scanf("%d", &cantEval);
 
-void desplegar(char opc[CANT][LEN],int n, int px, int py, int sel )
+    for (i = 0; i < cantEval; i++)
+    {
+        printf("Describa en dos palabras la evaluacion no. %d\n", i+1);
+        fflush(stdin);
+        gets(evaluacion[i].descripcion);
+        fflush(stdin);
+        puts(evaluacion[i].descripcion);
+        fflush(stdin);
+        printf("Asignele un valor en base a 100 a esta evaluacion\n");
+        scanf("%f", &evaluacion[i].porcentaje);
+        fflush(stdin);
+        if (evaluacion[i].porcentaje< 0 || evaluacion[i].porcentaje > 100)
+        {
+            printf("DIGITE UNA CALIFICACION VALIDA\n");
+        }
+
+    }while (evaluacion[i].porcentaje < 0 || evaluacion[i].porcentaje > 100);
+    system("cls");
+    main();
+}
+
+void getDatosEstud(int cantEval, ESTUD estudiantes[MAXESTUD], EVAL evaluacion[MAXEVA])
+{
+    _setcursortype(2);
+    system("cls");
+    int cantEstud, i, j;
+    if (cantEval == 0)
+    {
+        printf("POR FAVOR INSERTE LAS EVALUACIONES DEL CURSO ANTES DE REGISTRAR ESTUDIANTES.");
+        system("PAUSE");
+        system("cls");
+        main();
+    }
+    else{
+        do{
+        printf("Introduzca la cantidad de estudiantes a tomar el curso: \n");
+        scanf("%d", &cantEstud);
+        if (cantEstud < 0 || cantEstud >= MAXESTUD)
+            printf("DIGITE UNA CANTIDAD DE ESTUDIANTES INDICADA.\n");
+        else
+        {
+            for (i = 0; i<cantEstud; i++)
+            {
+                fflush(stdin);
+                printf("%d. Matricula en formato (2018-0000): \n", i+1);
+                fflush(stdin);
+                gets(estudiantes[i].matricula);
+                fflush(stdin);
+                puts(estudiantes[i].matricula);
+                fflush(stdin);
+                printf("%d. Nombre: \n", i+1);
+                fflush(stdin);
+                gets(estudiantes[i].nombre);
+                fflush(stdin);
+                puts(estudiantes[i].nombre);
+                fflush(stdin);
+                for (j = 0; j<cantEval; j++)
+                {
+                    do {
+                    fflush(stdin);
+                    printf("Calificacion obtenida en la evaluacion: ");
+                    fflush(stdin);
+                    puts(evaluacion[j].descripcion);
+                    fflush(stdin);
+                    scanf("%f", evaluacion[j].puntosPorEvaluacion);
+                    fflush(stdin);
+                    printf("%.2f\n", evaluacion[j].puntosPorEvaluacion);
+                    if (evaluacion[j].puntosPorEvaluacion< 0 || evaluacion[j].puntosPorEvaluacion> 100)
+                        printf("DIGITE UNA CALIFICACION VALIDA\n");
+
+                    }while (evaluacion[j].puntosPorEvaluacion < 0 || evaluacion[j].puntosPorEvaluacion > 100);
+                }
+            }
+        }
+        }while(cantEstud > 0 || cantEstud <= MAXESTUD);
+    }
+}
+
+void desplegar(char opc[CANT][LEN],int n, int px, int py, int sel)
 {
    int ind;
 
@@ -139,10 +234,13 @@ void colordefault()
 }
 
 
+
 int menu(char opc[CANT][LEN], int n,int px,int py)
 {
-   int select = 0;
+   int select = 0, cantEval = 0;
    char tecla;
+   EVAL evaluaciones[MAXEVA];
+   ESTUD estudiantes[MAXESTUD];
 
    _setcursortype(0);
    do{
@@ -170,12 +268,17 @@ int menu(char opc[CANT][LEN], int n,int px,int py)
       select = -1;
    else
    {
-      if ( select != n-1 )
-         menu(opc,n,px+10,py+select);
+    //Selección de los elementos del menú.
+    if ( select == 0 )
+        getDatosEval(cantEval, evaluaciones);
+
+    if ( select == 1 )
+        getDatosEstud(estudiantes, cantEval, evaluaciones);
    }
 
    return select;
 }
+
 
 int random(int a, int b)
 {
