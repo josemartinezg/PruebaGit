@@ -1,0 +1,11 @@
+
+
+*** Reporte de calificaciones grupo: Mates ***
+
+  Matricula  |      Nombre               |       pp1 (0.33)|       pp2 (0.33)|       pp3 (0.34)|Puntos Totales   |  Calif. Final
+  2015-0378  |                           |        20.00     |       60.00     |       100.00     |            60.40   |      D
+  2015-0095  |                   Juanillo|        60.00     |       20.00     |       100.00     |            60.40   |      D
+
+El estudiante de mayor nota es                 2015-0378 con una calif. de 60.40 equivalente a D
+
+El estudiante de menor nota es                 2015-0378 con una calif. de 60.40 equivalente a D

@@ -37,14 +37,28 @@ int main()
     float porcientoTotal = 0;
     MATERIA Materia;
     clrscr();
-    printf("Digite el nombre de la materia: ");
-    gets(Materia.nombMateria);
+     do{
+        printf("Digite el nombre de la materia: ");
+        gets(Materia.nombMateria);
+        fflush(stdin);
+        if (strlen(Materia.nombMateria) == 0)
+            printf("\n\nERROR NO PUEDE DEJAR EL NOMBRE DEL ESTUDIANTE EN BLANCO.\n  ");
+     }while(strlen(Materia.nombMateria) == 0);
+
+    do{
+        printf("Digite la cantidad de estudiantes (Max: 40): ");
+        fflush(stdin);
+        scanf("%d",&Materia.cantEst);
+        if (Materia.cantEst <= 0 || Materia.cantEst > 40)
+            printf("\n\nERROR, REVISE EL NUMERO DE ESTUDIANTES DIGITADOS.\n");
+    }while (Materia.cantEst <= 0 || Materia.cantEst > 40);
     fflush(stdin);
-    printf("Digite la cantidad de estudiantes (Max: 40): ");
-    scanf("%d",&Materia.cantEst);
-    fflush(stdin);
-    printf("Digite la cantidad de evaluaciones (Max: 10) : ");
-    scanf("%d",&Materia.cantEval);
+    do{
+        printf("Digite la cantidad de evaluaciones (Max: 10) : ");
+        scanf("%d",&Materia.cantEval);
+        if (Materia.cantEval <= 0 || Materia.cantEval > 10)
+            printf("\n\nERROR, REVISE EL NUMERO DE MATERIAS DIGITADOS.\n");
+    }while (Materia.cantEval <= 0 || Materia.cantEval > 10);
     fflush(stdin);
     char *filename = concat(Materia.nombMateria,".txt");
     ofp = fopen( filename, "w");
@@ -56,10 +70,15 @@ int main()
     for(i = 0; i < Materia.cantEval ; i++)
     {
         clrscr();
+
         printf("\n\n*** Descripcion Evaluacion # %d/%d ***\n\n",i+1,Materia.cantEval);
-        printf("Digite la descripcion: ");
-        gets(Materia.evaluaciones[i]);
-        fflush(stdin);
+        do{
+            printf("Digite la descripcion: ");
+            gets(Materia.evaluaciones[i]);
+            fflush(stdin);
+            if (strlen(Materia.evaluaciones[i]) == 0)
+                printf("\n\nERROR NO PUEDE DEJAR LA DESCRIPCION EN BLANCO.\n  ");
+        }while(strlen(Materia.evaluaciones[i]) == 0);
         printf("Digite valor porcentual (en base a 100): ");
         scanf("%f",&Materia.valorPorcentual[i]);
         fflush(stdin);
@@ -76,7 +95,7 @@ int main()
     if(porcientoTotal != 1)
     {
         clrscr();
-        printf("\n\nERROR LA SUMA DEL VALOR PORCENTUAL NO PUEDE EXCEDER DE 100%");
+        printf("\n\nERROR LA SUMA DEL VALOR PORCENTUAL NO PUEDE EXCEDER NI ESTAR POR DEBAJO DE 100%");
         exit(1);
     }
 
@@ -86,12 +105,22 @@ int main()
     for(i = 0; i < Materia.cantEst ; i++)
     {
         printf("\n\n*** Nombre y matricula del estudiante # %d/%d ***\n\n",i+1,Materia.cantEst);
-        printf("Digite el nombre completo del estudiante:");
-        fflush(stdin);
-        gets(Materia.Estudiantes[i].nombre);
-        printf("Digite matricula del estudiante:");
-        fflush(stdin);
-        gets(Materia.Estudiantes[i].matricula);
+        do{
+            printf("Digite el nombre completo del estudiante:");
+            fflush(stdin);
+            gets(Materia.Estudiantes[i].nombre);
+            if (strlen(Materia.Estudiantes[i].nombre) == 0)
+                printf("\n\nERROR NO PUEDE DEJAR EL NOMBRE DEL ESTUDIANTE EN BLANCO.\n");
+        }while(strlen(Materia.Estudiantes[i].nombre) == 0);
+
+        do{
+            printf("Digite matricula del estudiante:");
+            fflush(stdin);
+            gets(Materia.Estudiantes[i].matricula);
+            if (strlen(Materia.Estudiantes[i].matricula) == 0 || matriculaTypo(Materia.Estudiantes[i].matricula) == 1)
+                printf("\n\nERROR FORMATO INVALIDO DE LA MATRICULA.\n");
+        }while(strlen(Materia.Estudiantes[i].matricula) == 0 || matriculaTypo(Materia.Estudiantes[i].matricula) == 1);
+
         Materia.Estudiantes[i].calif = 0; //inicializacion de variable acumuladora de puntos totales en 0
     }
 
@@ -214,5 +243,31 @@ char* concat(const char *s1, const char *s2)
     strcpy(result, s1);
     strcat(result, s2);
     return result;
+}
+
+int matriculaTypo (char mat[])
+{
+    int len = strlen(mat), lenCod = strlen(&mat[5]);
+    int i;
+
+    if (lenCod < 4 || lenCod > 4) return 1;
+
+    for (i = 0; i < len; i++) {
+        if (i < 4)
+        {
+            if (mat[i] < '0' || mat[i] > '9')
+                return 1;
+        }
+
+        if (mat[4] != '-')
+            return 1;
+
+        if (i > 4)
+        {
+            if (mat[i] < '0' || mat[i] > '9')
+                return 1;
+        }
+    }
+    return 0;
 }
 
