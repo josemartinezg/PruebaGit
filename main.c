@@ -27,16 +27,30 @@ typedef struct
 
 char letter(float );
 char* concat(const char *, const char *);
+MATERIA getInfoCurso(MATERIA);
+MATERIA getInfoEval(MATERIA);
+MATERIA getInfoEstud(MATERIA);
+MATERIA getCalificaciones(MATERIA);
+MATERIA imprimirResultados(MATERIA);
 
 int main()
 {
     textbackground(BLUE);
     textcolor(YELLOW);
     FILE *ofp;
-    int i, j,may = 0,men = 0;
-    float porcientoTotal = 0;
+    int i, j;
     MATERIA Materia;
+    Materia = getInfoCurso(Materia);
+    Materia = getInfoEval(Materia);
+    Materia = getInfoEstud(Materia);
+    Materia = getCalificaciones(Materia);
+    imprimirResultados(Materia);
+    return 0;
+}
+
+MATERIA getInfoCurso(MATERIA Materia){
     clrscr();
+     FILE *ofp;
      do{
         printf("Digite el nombre de la materia: ");
         gets(Materia.nombMateria);
@@ -65,8 +79,13 @@ int main()
     free(filename);
 
     /* Recibir evaluaciones del grupo Descripcion + Valor conceptual */
-
+    return Materia;
     clrscr();
+}
+
+MATERIA getInfoEval(MATERIA Materia){
+    int i;
+    float porcientoTotal = 0;
     for(i = 0; i < Materia.cantEval ; i++)
     {
         clrscr();
@@ -100,8 +119,14 @@ int main()
     }
 
     /* Recibir nombre y matricula del estudiante */
-
+    return Materia;
     clrscr();
+
+}
+
+MATERIA getInfoEstud(MATERIA Materia)
+{
+    int i;
     for(i = 0; i < Materia.cantEst ; i++)
     {
         printf("\n\n*** Nombre y matricula del estudiante # %d/%d ***\n\n",i+1,Materia.cantEst);
@@ -125,8 +150,13 @@ int main()
     }
 
     /* Recibir calificaciones del estudiante */
-
+    return Materia;
     clrscr();
+}
+
+MATERIA getCalificaciones(MATERIA Materia)
+{
+    int i, j;
     for(i = 0; i < Materia.cantEval ; i++)
     {
         clrscr();
@@ -144,7 +174,14 @@ int main()
     /* Imprimir calificaciones del grupo */
 
     fflush(stdin);
+    return Materia;
     clrscr();
+}
+
+MATERIA imprimirResultados(MATERIA Materia)
+{
+    int i, j, may = 0,men = 0;;
+    FILE *ofp;
     printf("\n\n*** Reporte de calificaciones grupo: %s ***\n\n",Materia.nombMateria);
     printf("  Matricula  |      Nombre               |");
     for(i = 0 ; i < Materia.cantEval ; i++)
@@ -218,9 +255,7 @@ int main()
 
     free(ofp);
 
-    return 0;
 }
-
 //Es para hallar la nota en letra
 char letter(float promedio)
 {
