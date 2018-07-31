@@ -3,6 +3,8 @@
 #include <string.h>
 #include <conio.h>
 
+#define LEN 60
+#define CANT  5
 
 typedef struct
 {
@@ -31,47 +33,77 @@ MATERIA getInfoCurso(MATERIA);
 MATERIA getInfoEval(MATERIA);
 MATERIA getInfoEstud(MATERIA);
 MATERIA getCalificaciones(MATERIA);
-MATERIA imprimirResultados(MATERIA);
+void imprimirResultados(MATERIA);
 
 int main()
 {
     textbackground(BLUE);
     textcolor(YELLOW);
-    FILE *ofp;
-    int i, j;
     MATERIA Materia;
-    Materia = getInfoCurso(Materia);
-    Materia = getInfoEval(Materia);
-    Materia = getInfoEstud(Materia);
-    Materia = getCalificaciones(Materia);
-    imprimirResultados(Materia);
+    FILE *ofp;
+    char tecla;
+    int i, j, ind;
+    char opciones[CANT][LEN] = {"1. Registrar Curso                       ",
+                                "2. Registrar Evaluacion(es)              ",
+                                "3. Registrar Estudiante(s)               ",
+                                "4. Visualizar Calificacion(es) del curso ",
+                                "5. Salir                                 "};
+    for ( ind = 0; ind < CANT; ind ++ )
+    {
+        printf("%s\n", opciones[ind]);
+    }
+    printf("Escoja una opcion...");
+    tecla = getch();
+    if (tecla == '1'){
+         Materia = getInfoCurso(Materia);
+    }if (tecla == '2'){
+        Materia = getInfoEval(Materia);
+    }if (tecla == '3'){
+        Materia = getInfoEstud(Materia);
+    }if (tecla == '4'){
+        Materia = getCalificaciones(Materia);
+    }if (tecla == '5'){
+        imprimirResultados(Materia);
+    }
+
+   /*int opc;
+
+   opc = menu(opciones,CANT,10,5);
+*/
+
     return 0;
 }
-
+/*
+    Función "getInfoCurso".
+    Recibe: un dato de tipo MATERIA.
+    Devuelve: un dato de tipo MATERIA.
+    Obtiene toda la información, del usuario, concerniente a un curso.
+*/
 MATERIA getInfoCurso(MATERIA Materia){
     clrscr();
-     FILE *ofp;
-     do{
+
+    FILE *ofp;
+    do{
         printf("Digite el nombre de la materia: ");
         gets(Materia.nombMateria);
         fflush(stdin);
-        if (strlen(Materia.nombMateria) == 0)
-            printf("\n\nERROR NO PUEDE DEJAR EL NOMBRE DEL ESTUDIANTE EN BLANCO.\n  ");
-     }while(strlen(Materia.nombMateria) == 0);
+    if (strlen(Materia.nombMateria) == 0)
+        printf("\n\nERROR NO PUEDE DEJAR EL NOMBRE DEL ESTUDIANTE EN BLANCO.\n  ");
+    }while(strlen(Materia.nombMateria) == 0);
 
     do{
         printf("Digite la cantidad de estudiantes (Max: 40): ");
         fflush(stdin);
         scanf("%d",&Materia.cantEst);
-        if (Materia.cantEst <= 0 || Materia.cantEst > 40)
-            printf("\n\nERROR, REVISE EL NUMERO DE ESTUDIANTES DIGITADOS.\n");
+    if (Materia.cantEst <= 0 || Materia.cantEst > 40)
+        printf("\n\nERROR, REVISE EL NUMERO DE ESTUDIANTES DIGITADOS.\n");
     }while (Materia.cantEst <= 0 || Materia.cantEst > 40);
     fflush(stdin);
     do{
         printf("Digite la cantidad de evaluaciones (Max: 10) : ");
         scanf("%d",&Materia.cantEval);
-        if (Materia.cantEval <= 0 || Materia.cantEval > 10)
-            printf("\n\nERROR, REVISE EL NUMERO DE MATERIAS DIGITADOS.\n");
+    if (Materia.cantEval <= 0 || Materia.cantEval > 10)
+        printf("\n\nERROR, REVISE EL NUMERO DE MATERIAS DIGITADOS.\n");
     }while (Materia.cantEval <= 0 || Materia.cantEval > 10);
     fflush(stdin);
     char *filename = concat(Materia.nombMateria,".txt");
@@ -82,7 +114,12 @@ MATERIA getInfoCurso(MATERIA Materia){
     return Materia;
     clrscr();
 }
-
+/*
+    Función "getInfoEval".
+    Recibe: un dato de tipo MATERIA.
+    Devuelve: un dato de tipo MATERIA.
+    Obtiene toda la información, del usuario, concerniente a una evaluación de un curso.
+*/
 MATERIA getInfoEval(MATERIA Materia){
     int i;
     float porcientoTotal = 0;
@@ -123,7 +160,12 @@ MATERIA getInfoEval(MATERIA Materia){
     clrscr();
 
 }
-
+/*
+    Función "getInfoEstud".
+    Recibe: un dato de tipo MATERIA.
+    Devuelve: un dato de tipo MATERIA.
+    Obtiene toda la información, del usuario, concerniente a los estudiantes de la materia.
+*/
 MATERIA getInfoEstud(MATERIA Materia)
 {
     int i;
@@ -153,7 +195,12 @@ MATERIA getInfoEstud(MATERIA Materia)
     return Materia;
     clrscr();
 }
-
+/*
+    Función "getCalificaciones".
+    Recibe: un dato de tipo MATERIA.
+    Devuelve: un dato de tipo MATERIA.
+    Obtiene toda la información, del usuario, concerniente a las calificaciones obtenidas por los estudiantes de una materia.
+*/
 MATERIA getCalificaciones(MATERIA Materia)
 {
     int i, j;
@@ -177,8 +224,13 @@ MATERIA getCalificaciones(MATERIA Materia)
     return Materia;
     clrscr();
 }
-
-MATERIA imprimirResultados(MATERIA Materia)
+/*
+    Función "imprimirResultados".
+    Recibe: un dato de tipo MATERIA.
+    Devuelve: nada.
+    Muestra en orden toda la información obtenida y cálculada a solicitud de la especificación del programa.
+*/
+void imprimirResultados(MATERIA Materia)
 {
     int i, j, may = 0,men = 0;;
     FILE *ofp;
@@ -256,7 +308,12 @@ MATERIA imprimirResultados(MATERIA Materia)
     free(ofp);
 
 }
-//Es para hallar la nota en letra
+/*
+    Función "letter".
+    Recibe: float.
+    Devuelve: char.
+    Calcula la letra correspondiente en base a los rangos de promedio.
+*/
 char letter(float promedio)
 {
     if(promedio < 60)
@@ -271,7 +328,12 @@ char letter(float promedio)
         return 'A';
 }
 
-//funcion para conectar 2 strings
+/*
+    Función "concat".
+    Recibe: char *. char *.
+    Devuelve: char*.
+    Recibe dos punteros de caracteres (dos cadenas o strings) y los concatena.
+*/
 char* concat(const char *s1, const char *s2)
 {
     char *result = malloc(strlen(s1) + strlen(s2) + 1);
@@ -279,7 +341,13 @@ char* concat(const char *s1, const char *s2)
     strcat(result, s2);
     return result;
 }
-
+/*
+    Función "matriculaTypo".
+    Recibe: char[].
+    Devuelve: int.
+    Recibe un arreglo de caracteres (una cadenas o string) y verifica caracter a caracter si cumple
+    con el formato requerido de una matricula.
+*/
 int matriculaTypo (char mat[])
 {
     int len = strlen(mat), lenCod = strlen(&mat[5]);
